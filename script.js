@@ -1,5 +1,5 @@
 const main = document.querySelector('main');
-const voices = document.getElementById('voices');
+const voiceSelect = document.getElementById('voices');
 const textarea = document.getElementById('text');
 const readBtn = document.getElementById('read');
 const toggleBtn = document.getElementById('toggle');
@@ -56,5 +56,53 @@ const data = [
         text: 'I Want To Go To Grandmas'
       }
 
+];
 
-]
+data.forEach(createBox);
+
+//Create speech boxes
+function createBox(item){
+    const box = document.createElement('div');
+    const {image, text} = item;
+
+    box.classList.add('box');
+    box.innerHTML = `
+        <img src="${image}" alt="${text}" />
+        <p class="info">${text}</p>
+    `;
+
+    main.appendChild(box);
+
+}
+
+
+//Store voices
+let voices = [];
+
+function getVoices(){
+    voices = speechSynthesis.getVoices();
+
+    voices.forEach(voice => {
+        const option = document.createElement('option');
+        option.value = voice.name;
+        option.innerText = `${voice.name} ${voice.lang}`;
+
+        voiceSelect.appendChild(option);
+    })
+}
+
+
+//Voices changed
+speechSynthesis.addEventListener('voiceschanged', getVoices);
+
+//Toggle text .box
+toggleBtn.addEventListener('click', () => document.getElementById('text-box').classList.toggle('show'));
+
+closeBtn.addEventListener('click', () => document.getElementById('text-box').classList.remove('show'));
+
+//Change voice
+
+//voiceSelect.addEventListener('change', setVoice)
+
+getVoices();
+
